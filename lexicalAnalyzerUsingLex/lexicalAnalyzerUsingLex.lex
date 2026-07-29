@@ -14,7 +14,7 @@ if|then|else|int|while|char	{printf("%s is a keyword.\n", yytext);}
 [\t\n]+				{/*ignore whitespace*/}
 [();{}]				{printf("%s is a separator.\n", yytext);}
 [,]				{printf("%s is a delimiter.\n", yytext);}
-"="|"+"|"-"|"*"|"/"|"%"		{printf("%s is an operator.\n", yytext);}
+"="|"+"|"-"|"*"|"/"|"%"|"<"|">"|"<="|">="|"=="|"!=" 		{printf("%s is an operator.\n", yytext);}
 %%
 
 int main()
