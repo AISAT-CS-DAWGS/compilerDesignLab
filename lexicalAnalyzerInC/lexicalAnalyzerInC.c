@@ -93,6 +93,7 @@ int main() {
 
       if (is_keyword(token)) {
         printf("Keyword: %s\n", token);
+        i = 0;
       } else {
         printf("Identifier: %s\n", token);
         i = 0;
