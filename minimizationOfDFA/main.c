@@ -8,9 +8,11 @@ int final_states[MAX], n_final;
 int removed[MAX] = {0};
 
 int is_final(int s) {
-  for (int i = 0; i < n_final; i++)
-    if (final_states[i] == s)
+  for (int i = 0; i < n_final; i++) {
+    if (final_states[i] == s) {
       return 1;
+    }
+  }
   return 0;
 }
 
@@ -19,8 +21,9 @@ int equivalent(int s1, int s2) {
     return 0;
   }
   for (int j = 0; j < n_symbols; j++) {
-    if (transition[s1][j] != transition[s2][j])
+    if (transition[s1][j] != transition[s2][j]) {
       return 0;
+    }
   }
   return 1;
 }
@@ -28,8 +31,9 @@ int equivalent(int s1, int s2) {
 void substitute_state(int old_state, int new_state) {
   for (int i = 0; i < n_states; i++) {
     for (int j = 0; j < n_symbols; j++) {
-      if (transition[i][j] == old_state)
+      if (transition[i][j] == old_state) {
         transition[i][j] = new_state;
+      }
     }
   }
 }
@@ -55,11 +59,14 @@ int main() {
   scanf("%d", &n_final);
 
   printf("Enter final states: ");
-  for (i = 0; i < n_final; i++)
+  for (i = 0; i < n_final; i++) {
     scanf("%d", &final_states[i]);
+  }
+
   for (i = 0; i < n_states; i++) {
-    if (removed[i])
+    if (removed[i]) {
       continue;
+    }
     for (j = i + 1; j < n_states; j++) {
       if (!removed[j] && equivalent(i, j)) {
         printf("q%d and q%d are equivalent (same group) → Eliminating q%d\n", i,
@@ -81,8 +88,9 @@ int main() {
   for (i = 0; i < n_states; i++) {
     if (!removed[i]) {
       printf("q%d\t", i);
-      for (j = 0; j < n_symbols; j++)
+      for (j = 0; j < n_symbols; j++) {
         printf("q%d\t", transition[i][j]);
+      }
       printf("\n");
     }
   }
