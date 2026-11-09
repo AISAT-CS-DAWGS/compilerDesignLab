@@ -2,83 +2,88 @@
 #include <stdio.h>
 #include <string.h>
 
-int n, m = 0, i = 0, j = 0;
-char a[10][10], f[10];
+int productionCount, resultCount;
+char productions[10][10], result[10];
 
-void follow(char c);
-void first(char c);
+void first(char symbol);
+void follow(char symbol);
 
 int main() {
-  int z;
-  char c, ch;
+  char symbol;
+  int choice;
 
   printf("Enter the number of productions: ");
-  scanf("%d", &n);
+  scanf("%d", &productionCount);
 
-  printf("Enter the productions (example: E=E+T):\n");
-  for (i = 0; i < n; i++) {
-    scanf("%s", a[i]);
+  printf("Enter the productions (example: E=E+T): \n");
+  for (int i = 0; i < productionCount; i++) {
+    scanf("%s", productions[i]);
   }
 
   do {
-    m = 0;
-    printf("\nEnter the element whose FIRST & FOLLOW is to be found: ");
-    scanf(" %c", &c);
+    resultCount = 0;
 
-    first(c);
+    printf("\nEnter the element whose FIRST and FOLLOW is to be found: ");
+    scanf(" %c", &symbol);
 
-    printf("FIRST(%c) = { ", c);
-    for (i = 0; i < m; i++) {
-      printf("%c ", f[i]);
+    first(symbol);
+
+    printf("FIRST(%c) = { ", symbol);
+    for (int i = 0; i < resultCount; i++) {
+      printf("%c ", result[i]);
     }
     printf("}\n");
-    strcpy(f, " ");
-    m = 0;
 
-    follow(c);
+    strcpy(result, " ");
+    resultCount = 0;
 
-    printf("FOLLOW(%c) = { ", c);
-    for (i = 0; i < m; i++) {
-      printf("%c ", f[i]);
+    follow(symbol);
+
+    printf("FOLLOW(%c) = { ", symbol);
+    for (int i = 0; i < resultCount; i++) {
+      printf("%c ", result[i]);
     }
     printf("}\n");
+
     printf("Continue? (1 = yes / 0 = no): ");
-    scanf("%d", &z);
-  } while (z == 1);
+    scanf("%d", &choice);
+  } while (choice == 1);
+
   return 0;
 }
 
-void first(char c) {
-  int k;
-  if (!isupper(c)) {
-    f[m++] = c;
+void first(char symbol) {
+  if (!isupper(symbol)) {
+    result[resultCount++] = symbol;
     return;
   }
-  for (k = 0; k < n; k++) {
-    if (a[k][0] == c) {
-      if (a[k][2] == '$') {
-        follow(a[k][0]);
-      } else if (islower(a[k][2])) {
-        f[m++] = a[k][2];
+
+  for (int i = 0; i < productionCount; i++) {
+    if (productions[i][0] == symbol) {
+      if (productions[i][2] == '$') {
+        follow(productions[i][0]);
+      } else if (islower(productions[i][2])) {
+        result[resultCount++] = productions[i][2];
       } else {
-        first(a[k][2]);
+        first(productions[i][2]);
       }
     }
   }
 }
 
-void follow(char c) {
-  if (a[0][0] == c) {
-    f[m++] = '$';
+void follow(char symbol) {
+  if (productions[0][0] == symbol) {
+    result[resultCount++] = '$';
   }
-  for (i = 0; i < n; i++) {
-    for (j = 2; j < strlen(a[i]); j++) {
-      if (a[i][j] == c) {
-        if (a[i][j + 1] != '\0') {
-          first(a[i][j + 1]);
+
+  for (int i = 0; i < productionCount; i++) {
+    for (int j = 2; j < strlen(productions[i]); j++) {
+      if (productions[i][j] == symbol) {
+        if (productions[i][j + 1] != '\0') {
+          first(productions[i][j + 1]);
         }
-        if (a[i][j + 1] == '\0' && c != a[i][0]) {
-          follow(a[i][0]);
+        if (productions[i][j + 1] == '\0' && symbol != productions[i][0]) {
+          follow(productions[i][0]);
         }
       }
     }
