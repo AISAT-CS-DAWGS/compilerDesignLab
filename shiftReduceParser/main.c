@@ -2,53 +2,59 @@
 #include <string.h>
 
 // Array to store input string
-char a[16];
+char inputString[16];
 
-// Integer variable to store strlength of input string
-int c;
+// Integer variable to store length of input string
+int inputLength;
 
-// Use act array
-char act[10];
+// Array to store shift action
+char shiftAction[10];
 
-// Use ac array
-char ac[20];
+// Array to store reduction action
+char reductionAction[20];
 
-// stk for stack
-char stk[15];
+// Array to store stack
+char stack[15];
 
 void check();
 
-int i = 0, j = 0, k = 0;
+int stackIndex = 0, inputIndex = 0, iteration = 0;
 
 int main() {
   printf("GRAMMAR is \nE->E+E\nE->E*E\nE->(E)\nE->id\n");
 
   printf("Enter input string: ");
-  scanf("%[^\n]", a);
+  scanf("%[^\n]", inputString);
 
-  c = strlen(a);
+  inputLength = strlen(inputString);
 
-  strcpy(act, "SHIFT->");
+  strcpy(shiftAction, "SHIFT->");
 
   printf("Stack \t Input \t Action\n");
 
-  for (k = 0; j < c; k++, i++, j++) {
-    if (a[j] == 'i' && a[j + 1] == 'd') {
-      stk[i] = a[j];
-      stk[i + 1] = a[j + 1];
-      stk[i + 2] = '\0';
-      a[j] = ' ';
-      a[j + 1] = ' ';
+  for (iteration = 0; inputIndex < inputLength;
+       iteration++, stackIndex++, inputIndex++) {
 
-      printf("\n$%s\t%s$\t%sid", stk, a, act);
+    if (inputString[inputIndex] == 'i' && inputString[inputIndex + 1] == 'd') {
+
+      stack[stackIndex] = inputString[inputIndex];
+      stack[stackIndex + 1] = inputString[inputIndex + 1];
+      stack[stackIndex + 2] = '\0';
+
+      inputString[inputIndex] = ' ';
+      inputString[inputIndex + 1] = ' ';
+
+      printf("\n$%s\t%s$\t%sid", stack, inputString, shiftAction);
       check();
     }
 
     else {
-      stk[i] = a[j];
-      stk[i + 1] = '\0';
-      a[j] = ' ';
-      printf("\n$%s\t%s$\t%ssymbols", stk, a, act);
+      stack[stackIndex] = inputString[inputIndex];
+      stack[stackIndex + 1] = '\0';
+
+      inputString[inputIndex] = ' ';
+
+      printf("\n$%s\t%s$\t%ssymbols", stack, inputString, shiftAction);
       check();
     }
   }
@@ -57,48 +63,58 @@ int main() {
 }
 
 void check() {
-  strcpy(ac, "REDUCTION TO E");
+  strcpy(reductionAction, "REDUCTION TO E");
 
-  for (int z = 0; z < c; z++) {
-    if (stk[z] == 'i' && stk[z + 1] == 'd') {
-      stk[z] = 'E';
-      stk[z + 1] = '\0';
+  for (int scanIndex = 0; scanIndex < inputLength; scanIndex++) {
 
-      printf("\n$%s\t%s$\t%s", stk, a, ac);
-      j++;
+    if (stack[scanIndex] == 'i' && stack[scanIndex + 1] == 'd') {
+      stack[scanIndex] = 'E';
+      stack[scanIndex + 1] = '\0';
+
+      printf("\n$%s\t%s$\t%s", stack, inputString, reductionAction);
+      inputIndex++;
     }
   }
 
-  for (int z = 0; z < c; z++) {
-    if (stk[z] == 'E' && stk[z + 1] == '+' && stk[z + 2] == 'E') {
-      stk[z] = 'E';
-      stk[z + 1] = '\0';
-      stk[z + 2] = '\0';
+  for (int scanIndex = 0; scanIndex < inputLength; scanIndex++) {
 
-      printf("\n$%s\t%s$\t%s", stk, a, ac);
-      i = i - 2;
+    if (stack[scanIndex] == 'E' && stack[scanIndex + 1] == '+' &&
+        stack[scanIndex + 2] == 'E') {
+
+      stack[scanIndex] = 'E';
+      stack[scanIndex + 1] = '\0';
+      stack[scanIndex + 2] = '\0';
+
+      printf("\n$%s\t%s$\t%s", stack, inputString, reductionAction);
+      stackIndex = stackIndex - 2;
     }
   }
 
-  for (int z = 0; z < c; z++) {
-    if (stk[z] == 'E' && stk[z + 1] == '*' && stk[z + 2] == 'E') {
-      stk[z] = 'E';
-      stk[z + 1] = '\0';
-      stk[z + 2] = '\0';
+  for (int scanIndex = 0; scanIndex < inputLength; scanIndex++) {
 
-      printf("\n$%s\t%s$\t%s", stk, a, ac);
-      i = i - 2;
+    if (stack[scanIndex] == 'E' && stack[scanIndex + 1] == '*' &&
+        stack[scanIndex + 2] == 'E') {
+
+      stack[scanIndex] = 'E';
+      stack[scanIndex + 1] = '\0';
+      stack[scanIndex + 2] = '\0';
+
+      printf("\n$%s\t%s$\t%s", stack, inputString, reductionAction);
+      stackIndex = stackIndex - 2;
     }
   }
 
-  for (int z = 0; z < c; z++) {
-    if (stk[z] == '(' && stk[z + 1] == 'E' && stk[z + 2] == ')') {
-      stk[z] = 'E';
-      stk[z + 1] = '\0';
-      stk[z + 2] = '\0';
+  for (int scanIndex = 0; scanIndex < inputLength; scanIndex++) {
 
-      printf("\n$%s\t%s$\t%s", stk, a, ac);
-      i = i - 2;
+    if (stack[scanIndex] == '(' && stack[scanIndex + 1] == 'E' &&
+        stack[scanIndex + 2] == ')') {
+
+      stack[scanIndex] = 'E';
+      stack[scanIndex + 1] = '\0';
+      stack[scanIndex + 2] = '\0';
+
+      printf("\n$%s\t%s$\t%s", stack, inputString, reductionAction);
+      stackIndex = stackIndex - 2;
     }
   }
 }
