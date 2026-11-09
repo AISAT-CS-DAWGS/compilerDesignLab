@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define MAX_TOKEN_LENGTH 100
@@ -73,8 +72,6 @@ int main() {
             strncpy(header, start + 1, end - start - 1);
             header[end - start - 1] = '\0';
             printf("Header File: %s\n", header);
-          } else {
-            printf("Preprocessor Directive: %s\n", token);
           }
         }
       } else {
